@@ -12,9 +12,6 @@
 }
 
 body {
-  .note-container {
-    transition: height 0.3s ease-in-out; /* Add a smooth transition effect on height change */
-  }
   
   color: black;
   background: white;
