@@ -1,6 +1,3 @@
-import Image from "next/image";
-import Logo from "../Assets/icons/Frame.png";
-
 const Navbar = () => {
   return (
     <div className=" w-full flex  h-[80px] md:grid grid-cols-2 bg-[#202124] border-b border-b-[#4f5257]">
