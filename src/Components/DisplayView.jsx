@@ -1,64 +1,38 @@
-import React from 'react';
-import Image from 'next/image';
-import Delete from '../Assets/icons/Delete.svg';
+import React, { useState } from "react";
+import EditView from "./EditView";
 
-const DisplayView = ({
-  title,
-  content,
-  onDelete,
-  id,
-  editedContent,
-  setEditing,
-}) => {
-  const renderHTML = (htmlString) => {
-    return { __html: htmlString };
+const DisplayView = ({ notes, onNoteClick, onSaveNote }) => {
+  const [editingNote, setEditingNote] = useState(null);
+
+  const handleNoteClick = (note) => {
+    setEditingNote(note);
   };
 
-  // Function to get a placeholder based on the content
-  const getPlaceholder = () => {
-    if (content === '') {
-      return 'Take a note...';
-    }
-    if (editedContent.trim() === '') {
-      return 'Empty note';
-    }
-    // Add more conditions if needed
-    return '';
+  const handleSave = (updatedNote) => {
+    onSaveNote(updatedNote); // Call the save function passed as a prop
+    setEditingNote(null); // Exit edit mode
   };
 
   return (
-    <div
-      onClick={() => setEditing(true)}
-      className="flex flex-col justify-between gap-4 p-2 w-full h-full"
-    >
-      <h1
-        className="text-md font-semibold text-[#e8eaed] mb-2"
-        style={{ fontSize: '1.2rem', fontWeight: 'bold' }}
-      >
-        {title === '' ? 'Title' : title}
-      </h1>
-      <div
-        className="mb-2 text-[#e8eaed] overflow-hidden overflow-ellipsis"
-        style={{ fontSize: '1rem', maxHeight: '100px' }}
-        dangerouslySetInnerHTML={content ? renderHTML(content) : null}
-      >
-        {content ? null : <p>{getPlaceholder()}</p>}
-      </div>
-      <div className="flex gap-4">
-        <button
-          onClick={() => onDelete(id)}
-          className="bg-[#202124] rounded p-1 cursor-pointer"
-          title="Delete"
-        >
-          <Image
-            src={Delete}
-            alt="delete Icon"
-            width={15}
-            height={15}
-            style={{ color: 'red' }}
-          />
-        </button>
-      </div>
+    <div className="p-4">
+      {editingNote ? (
+        <EditView note={editingNote} onSave={handleSave} />
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 cursor-pointer">
+          {notes.map((note) => (
+            <div
+              key={note.id}
+              onClick={() => handleNoteClick(note)}
+              className="p-4 border rounded-2xl cursor-pointer bg-[#212121] hover:bg-gray-100"
+            >
+              <h3 className="text-lg font-semibold">{note.title}</h3>
+              <p className="text-sm text-gray-600">
+                {note.content.substring(0, 100)}...
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
